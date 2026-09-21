@@ -1,15 +1,22 @@
-
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def home():
-    project_name = "DeepFakeChain"
+
+    print("Request received:", request.method)
+
+    if request.method == "POST":
+        print("POST detected")
+
+        image = request.files["image"]
+
+        print("Filename:", image.filename)
 
     return render_template(
         "index.html",
-        project=project_name
+        project="DeepFakeChain"
     )
 
 if __name__ == "__main__":
