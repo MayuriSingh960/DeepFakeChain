@@ -18,6 +18,8 @@ def home():
     confidence = None
     width = None
     height = None
+    image_format = None
+    file_size = None
 
     print("Request received:", request.method)
 
@@ -37,13 +39,19 @@ def home():
 
                 print("Filename:", image.filename)
 
-                safe_name = secure_filename(image.filename)
+                safe_name = secure_filename(
+                    image.filename
+                )
 
-                extension = image.filename.rsplit(".", 1)[1].lower()
+                extension = image.filename.rsplit(
+                    ".", 1
+                )[1].lower()
 
                 if extension in ALLOWED_EXTENSIONS:
 
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    timestamp = datetime.now().strftime(
+                        "%Y%m%d_%H%M%S"
+                    )
 
                     new_filename = (
                         timestamp + "_" + safe_name
@@ -57,15 +65,51 @@ def home():
                     image.save(file_path)
 
                     image_name = new_filename
+
                     result = "Deepfake Detected"
+
                     confidence = 95
 
-                    print("Image saved successfully")
-                    print("Saved as:", new_filename)
+                    uploaded_image = Image.open(
+                        file_path
+                    )
+
+                    width, height = (
+                        uploaded_image.size
+                    )
+
+                    image_format = (
+                        uploaded_image.format
+                    )
+
+                    file_size = os.path.getsize(
+                        file_path
+                    )
+
+                    file_size = round(
+                        file_size / (1024 * 1024),
+                        2
+                    )
+
+                    print("Width:", width)
+                    print("Height:", height)
+                    print("Format:", image_format)
+                    print("File Size:", file_size, "MB")
+
+                    print(
+                        "Image saved successfully"
+                    )
+
+                    print(
+                        "Saved as:",
+                        new_filename
+                    )
 
                 else:
 
-                    print("Only JPG, JPEG and PNG files are allowed")
+                    print(
+                        "Only JPG, JPEG and PNG files are allowed"
+                    )
 
         else:
 
@@ -78,7 +122,9 @@ def home():
         result=result,
         confidence=confidence,
         width=width,
-        height=height
+        height=height,
+        image_format=image_format,
+        file_size=file_size
     )
 
 

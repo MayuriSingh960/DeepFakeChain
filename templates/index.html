@@ -1,56 +1,81 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DeepFakeChain</title>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 </head>
-</head>
+
 <body>
 
     <h1>{{ project }}</h1>
-    
-<form method="POST" enctype="multipart/form-data">
 
-    <input
-        type="file"
-        name="image"
-        accept=".jpg,.jpeg,.png"
+    <form
+        method="POST"
+        enctype="multipart/form-data"
     >
 
-    <br><br>
+        <input
+            type="file"
+            name="image"
+            accept=".jpg,.jpeg,.png"
+        >
 
-    <button type="submit">
-        Analyze Image
-    </button>
+        <br><br>
 
-</form>
-{% if image_name %}
+        <button type="submit">
+            Analyze Image
+        </button>
 
-<p>Uploaded Image:</p>
-<p>{{ image_name }}</p>
-<img
-    src="{{ url_for('static', filename='uploads/' + image_name) }}"
-    width="300"
->
+    </form>
 
-{% endif %}
-{% if result %}
+    {% if image_name %}
 
-<h2>Analysis Result</h2>
+    <h2>Uploaded Image</h2>
 
-<p>{{ result }}</p>
+    <p>{{ image_name }}</p>
 
-{% endif %}
+    <img
+        src="{{ url_for('static', filename='uploads/' + image_name) }}"
+        width="300"
+    >
 
-{% if confidence %}
+    {% endif %}
 
-<h2>Confidence</h2>
+    {% if result %}
 
-<p>{{ confidence }}%</p>
+    <h2>Analysis Result</h2>
 
-{% endif %}
+    <p>{{ result }}</p>
 
+    {% endif %}
+
+    {% if confidence %}
+
+    <h2>Confidence</h2>
+
+    <p>{{ confidence }}%</p>
+
+    {% endif %}
+
+    {% if width and height %}
+
+    <h2>Image Metadata</h2>
+
+    <p>Width: {{ width }} px</p>
+
+    <p>Height: {{ height }} px</p>
+
+    <p>Format: {{ image_format }}</p>
+    
+    <p>File Size: {{ file_size }} MB</p>
+
+    {% endif %}
 
 </body>
+
 </html>
