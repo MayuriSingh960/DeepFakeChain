@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 from flask import Flask, render_template, request
-
 from werkzeug.utils import secure_filename
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -16,6 +16,8 @@ def home():
     image_name = None
     result = None
     confidence = None
+    width = None
+    height = None
 
     print("Request received:", request.method)
 
@@ -34,6 +36,7 @@ def home():
             else:
 
                 print("Filename:", image.filename)
+
                 safe_name = secure_filename(image.filename)
 
                 extension = image.filename.rsplit(".", 1)[1].lower()
@@ -52,10 +55,10 @@ def home():
                     )
 
                     image.save(file_path)
+
                     image_name = new_filename
                     result = "Deepfake Detected"
-                    confidence = 95 
-                    
+                    confidence = 95
 
                     print("Image saved successfully")
                     print("Saved as:", new_filename)
@@ -73,7 +76,9 @@ def home():
         project="DeepFakeChain",
         image_name=image_name,
         result=result,
-        confidence=confidence
+        confidence=confidence,
+        width=width,
+        height=height
     )
 
 
