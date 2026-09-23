@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from flask import Flask, render_template, request
 
+from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "static/uploads"
@@ -32,6 +34,7 @@ def home():
             else:
 
                 print("Filename:", image.filename)
+                safe_name = secure_filename(image.filename)
 
                 extension = image.filename.rsplit(".", 1)[1].lower()
 
@@ -40,7 +43,7 @@ def home():
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
                     new_filename = (
-                        timestamp + "_" + image.filename
+                        timestamp + "_" + safe_name
                     )
 
                     file_path = os.path.join(
