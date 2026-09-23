@@ -13,6 +13,7 @@ def home():
 
     image_name = None
     result = None
+    confidence = None
 
     print("Request received:", request.method)
 
@@ -50,6 +51,8 @@ def home():
                     image.save(file_path)
                     image_name = new_filename
                     result = "Deepfake Detected"
+                    confidence = 95 
+                    
 
                     print("Image saved successfully")
                     print("Saved as:", new_filename)
@@ -66,7 +69,8 @@ def home():
         "index.html",
         project="DeepFakeChain",
         image_name=image_name,
-        result=result
+        result=result,
+        confidence=confidence
     )
 
 
