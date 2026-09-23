@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from PIL import Image
+from math import gcd
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ def home():
     height = None
     image_format = None
     file_size = None
+    aspect_ratio = None
 
     print("Request received:", request.method)
 
@@ -78,6 +80,19 @@ def home():
                         uploaded_image.size
                     )
 
+                    common_divisor = gcd(
+                       width,
+                       height
+                    )
+                    aspect_ratio = (
+                        f"{width // common_divisor}"
+                        f":"
+                        f"{height // common_divisor}"
+                    )
+                    #f is formatted string
+
+
+
                     image_format = (
                         uploaded_image.format
                     )
@@ -125,6 +140,8 @@ def home():
         height=height,
         image_format=image_format,
         file_size=file_size
+        aspect_ratio=aspect_ratio
+        
     )
 
 
