@@ -4,12 +4,13 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    image_name = None
 
     print("Request received:", request.method)
 
@@ -45,6 +46,7 @@ def home():
                     )
 
                     image.save(file_path)
+                    image_name = new_filename
 
                     print("Image saved successfully")
                     print("Saved as:", new_filename)
@@ -59,7 +61,8 @@ def home():
 
     return render_template(
         "index.html",
-        project="DeepFakeChain"
+        project="DeepFakeChain",
+        image_name=image_name
     )
 
 

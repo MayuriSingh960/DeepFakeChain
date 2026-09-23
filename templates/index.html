@@ -25,6 +25,16 @@
     </button>
 
 </form>
+{% if image_name %}
+
+<p>Uploaded Image:</p>
+<p>{{ image_name }}</p>
+<img
+    src="{{ url_for('static', filename='uploads/' + image_name) }}"
+    width="300"
+>
+
+{% endif %}
     
 
     
