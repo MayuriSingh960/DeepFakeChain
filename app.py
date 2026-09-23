@@ -1,10 +1,10 @@
 import os
+from datetime import datetime
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads"
-
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 
@@ -33,14 +33,21 @@ def home():
 
                 if extension in ALLOWED_EXTENSIONS:
 
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+                    new_filename = (
+                        timestamp + "_" + image.filename
+                    )
+
                     file_path = os.path.join(
                         UPLOAD_FOLDER,
-                        image.filename
+                        new_filename
                     )
 
                     image.save(file_path)
 
                     print("Image saved successfully")
+                    print("Saved as:", new_filename)
 
                 else:
 
