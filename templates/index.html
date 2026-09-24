@@ -64,17 +64,29 @@
 
     {% if width and height %}
 
-    <h2>Image Metadata</h2>
+    <div class="info-panel">
 
-    <p>Width: {{ width }} px</p>
+        <h2>Image Information Panel</h2>
 
-    <p>Height: {{ height }} px</p>
+        <p><b>Width:</b> {{ width }} px</p>
 
-    <p>Format: {{ image_format }}</p>
-    
-    <p>File Size: {{ file_size }} MB</p>
+        <p><b>Height:</b> {{ height }} px</p>
 
-    <p>Aspect Ratio: {{ aspect_ratio }}</p>
+        <p><b>Format:</b> {{ image_format }}</p>
+
+        <p><b>File Size:</b> {{ file_size }} MB</p>
+
+        <p><b>Aspect Ratio:</b> {{ aspect_ratio }}</p>
+
+    </div>
+
+    {% endif %}
+
+    {% if analysis_summary %}
+
+    <h2>Basic Analysis</h2>
+
+    <p>{{ analysis_summary }}</p>
 
     {% endif %}
 

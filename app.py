@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from PIL import Image
 from math import gcd
+import cv2
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    print("HOME FUNCTION CALLED")
 
     image_name = None
     result = None
@@ -22,6 +24,7 @@ def home():
     image_format = None
     file_size = None
     aspect_ratio = None
+    analysis_summary = None
 
     print("Request received:", request.method)
 
@@ -65,6 +68,11 @@ def home():
                     )
 
                     image.save(file_path)
+                    opencv_image = cv2.imread(file_path)
+                    print(type(opencv_image))
+                    print(opencv_image.shape)
+
+                    height_cv, width_cv, channels = opencv_image.shape 
 
                     image_name = new_filename
 
@@ -105,6 +113,14 @@ def home():
                         file_size / (1024 * 1024),
                         2
                     )
+                    analysis_summary = (
+                        f"This is a {image_format} image "
+                        f"with dimensions {width}x{height} "
+                        f"and a file size of {file_size} MB. "
+                        f"The aspect ratio is {aspect_ratio}."
+                    )
+
+
 
                     print("Width:", width)
                     print("Height:", height)
@@ -139,7 +155,9 @@ def home():
         width=width,
         height=height,
         image_format=image_format,
-        file_size=file_size
+        file_size=file_size,
+        analysis_summary=analysis_summary,
+        
         aspect_ratio=aspect_ratio
         
     )
