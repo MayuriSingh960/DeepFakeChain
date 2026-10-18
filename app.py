@@ -69,10 +69,10 @@ def home():
 
                     image.save(file_path)
                     opencv_image = cv2.imread(file_path)
-                    print(type(opencv_image))
-                    print(opencv_image.shape)
-
-                    height_cv, width_cv, channels = opencv_image.shape 
+                    if opencv_image is not None:
+                        height_cv, width_cv, channels = opencv_image.shape 
+                    else:
+                        analysis_summary = "Error: Unable to read the image using OpenCV."
 
                     image_name = new_filename
 
