@@ -25,6 +25,7 @@ def home():
     file_size = None
     aspect_ratio = None
     analysis_summary = None
+    average_brightness = None
 
     print("Request received:", request.method)
 
@@ -71,6 +72,8 @@ def home():
                     opencv_image = cv2.imread(file_path)
                     if opencv_image is not None:
                         height_cv, width_cv, channels = opencv_image.shape 
+                        gray_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2GRAY)
+                        average_brightness = gray_image.mean()
                     else:
                         analysis_summary = "Error: Unable to read the image using OpenCV."
 
@@ -157,6 +160,7 @@ def home():
         image_format=image_format,
         file_size=file_size,
         analysis_summary=analysis_summary,
+        average_brightness=average_brightness,
         
         aspect_ratio=aspect_ratio
         
