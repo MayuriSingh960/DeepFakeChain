@@ -7,6 +7,11 @@ from math import gcd
 import cv2
 
 app = Flask(__name__)
+face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+if(face_cascade.empty()):
+    print("Error loading cascade classifier")
+else:
+    print("Cascade classifier loaded successfully")
 
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
@@ -14,6 +19,7 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    
     print("HOME FUNCTION CALLED")
 
     image_name = None
@@ -73,6 +79,7 @@ def home():
                     if opencv_image is not None:
                         height_cv, width_cv, channels = opencv_image.shape 
                         gray_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2GRAY)
+                        rgb_image=cv2.cvtColor(opencv_image,cv2.COLOR_BGR2RGB)
                         average_brightness = gray_image.mean()
                     else:
                         analysis_summary = "Error: Unable to read the image using OpenCV."
