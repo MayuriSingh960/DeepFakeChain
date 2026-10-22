@@ -13,7 +13,13 @@ if(face_cascade.empty()):
 else:
     print("Cascade classifier loaded successfully")
 
-UPLOAD_FOLDER = "static/uploads"
+UPLOAD_FOLDER = os.path.join(
+    app.root_path,
+    "static",
+    "uploads"
+)
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 
@@ -32,6 +38,8 @@ def home():
     aspect_ratio = None
     analysis_summary = None
     average_brightness = None
+    facecount=None
+    annotated_name=None
 
     print("Request received:", request.method)
 
@@ -76,9 +84,34 @@ def home():
 
                     image.save(file_path)
                     opencv_image = cv2.imread(file_path)
+                    original_image=opencv_image.copy()
                     if opencv_image is not None:
                         height_cv, width_cv, channels = opencv_image.shape 
                         gray_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2GRAY)
+                        faces = face_cascade.detectMultiScale(gray_image,
+                                scaleFactor=1.1,
+                                minNeighbors=6,
+                                minSize=(50, 50)
+                            )
+                        facecount=len(faces)
+                        print("Detected faces:", len(faces))
+                        print("Face count variable:", facecount)
+                        for (x,y,width,height) in faces: 
+                            face_crop = original_image[y:y+height, x:x+width]
+                            face_filename = f"face_{x}_{y}_{width}_{height}.jpg"
+                            face_path = os.path.join(UPLOAD_FOLDER, face_filename)
+                            saved_face = cv2.imwrite(face_path, face_crop)
+                            cv2.rectangle(opencv_image,(x,y),(x+width,y+height),(255,0,0),2)
+
+                        annotated_filename= "annotated_" + new_filename
+                        annotated_path=os.path.join(UPLOAD_FOLDER, annotated_filename)
+                        saved=cv2.imwrite(annotated_path, opencv_image)
+                        annotated_name=annotated_filename
+                        print("Annotated image path:", annotated_path)
+                        print("Annotated image saved:", saved)
+                                                      
+
+                                   
                         rgb_image=cv2.cvtColor(opencv_image,cv2.COLOR_BGR2RGB)
                         average_brightness = gray_image.mean()
                     else:
@@ -168,8 +201,11 @@ def home():
         file_size=file_size,
         analysis_summary=analysis_summary,
         average_brightness=average_brightness,
+        facecount=facecount,
         
-        aspect_ratio=aspect_ratio
+        aspect_ratio=aspect_ratio,
+        annotated_name=annotated_name
+
         
     )
 
