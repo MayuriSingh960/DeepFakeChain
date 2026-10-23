@@ -97,8 +97,13 @@ def home():
                         facecount=len(faces)
                         print("Detected faces:", len(faces))
                         print("Face count variable:", facecount)
-                        for (x,y,width,height) in faces: 
+                        for index, (x, y, width, height) in enumerate(faces, start=1):
                             face_crop = original_image[y:y+height, x:x+width]
+                            face_gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
+                            edges = cv2.Canny(face_gray, 100, 200)
+                            edge_filename = f"edges_{index}_{new_filename}"
+                            edge_path = os.path.join(UPLOAD_FOLDER, edge_filename)
+                            cv2.imwrite(edge_path, edges)
                             face_filename = f"face_{x}_{y}_{width}_{height}.jpg"
                             face_path = os.path.join(UPLOAD_FOLDER, face_filename)
                             saved_face = cv2.imwrite(face_path, face_crop)
