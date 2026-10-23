@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from math import gcd
 import cv2
+import numpy as np
 
 app = Flask(__name__)
 face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -114,6 +115,17 @@ def home():
                                    
                         rgb_image=cv2.cvtColor(opencv_image,cv2.COLOR_BGR2RGB)
                         average_brightness = gray_image.mean()
+                        sharpness = cv2.Laplacian(gray_image, cv2.CV_64F).var()
+                        print("Average Brightness:", average_brightness)
+                        texture_std = np.std(gray_image)
+                        print("Texture Standard Deviation:", texture_std)
+                        blurred_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
+
+                        noise_image = cv2.absdiff(gray_image, blurred_image)
+
+                        noise_level = np.std(noise_image)
+
+                        print("Estimated Noise Level:", noise_level)
                     else:
                         analysis_summary = "Error: Unable to read the image using OpenCV."
 
